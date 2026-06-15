@@ -1,0 +1,309 @@
+Launching lib\main.dart on Chrome in debug mode...
+Waiting for connection from debug service on Chrome...             38.5s
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+Debug service listening on ws://127.0.0.1:64919/SNW2Kru3V1k=/ws
+A Dart VM Service on Chrome is available at: http://127.0.0.1:64919/SNW2Kru3V1k=
+The Flutter DevTools debugger and profiler on Chrome is available at: http://127.0.0.1:64919/SNW2Kru3V1k=/devtools/?uri=ws://127.0.0.1:64919/SNW2Kru3V1k=/ws
+Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.
+A message on the flutter/lifecycle channel was discarded before it could be handled.
+This happens when a plugin sends messages to the framework side before the framework has had an opportunity to register a listener. See the ChannelBuffers API documentation for details on how to configure the channel to expect more messages, or to expect messages to get discarded:
+  https://api.flutter.dev/flutter/dart-ui/ChannelBuffers-class.html
+A message on the flutter/lifecycle channel was discarded before it could be handled.
+This happens when a plugin sends messages to the framework side before the framework has had an opportunity to register a listener. See the ChannelBuffers API documentation for details on how to configure the channel to expect more messages, or to expect messages to get discarded:
+  https://api.flutter.dev/flutter/dart-ui/ChannelBuffers-class.html
+Failed to load font Roboto at https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2
+Flutter Web engine failed to complete HTTP request to fetch "https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2": TypeError: Failed to fetch
+A message on the flutter/lifecycle channel was discarded before it could be handled.
+This happens when a plugin sends messages to the framework side before the framework has had an opportunity to register a listener. See the ChannelBuffers API documentation for details on how to configure the channel to expect more messages, or to expect messages to get discarded:
+  https://api.flutter.dev/flutter/dart-ui/ChannelBuffers-class.html
+Failed to load font Noto Sans Arabic at https://fonts.gstatic.com/s/notosansarabic/v28/nwpxtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfyGyvvnCBFQLaig.woff2
+Flutter Web engine failed to complete HTTP request to fetch "https://fonts.gstatic.com/s/notosansarabic/v28/nwpxtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfyGyvvnCBFQLaig.woff2": TypeError: Failed to fetch
+Error: google_fonts was unable to load font Cairo-Bold because the following exception occurred:
+Exception: Failed to load font with url https://fonts.gstatic.com/s/a/cab28147a27dac0ed15216e54ee741dba1d8d416e276bfc117ccdfbfe8eeeef5.ttf: ClientException: Failed to fetch, uri=https://fonts.gstatic.com/s/a/cab28147a27dac0ed15216e54ee741dba1d8d416e276bfc117ccdfbfe8eeeef5.ttf
+If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+
+Error: google_fonts was unable to load font Cairo-Regular because the following exception occurred:
+Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d33c4f55184435de6dd2689c7de5c584345f30f0c3e71aac1ba192a947539b00.ttf: ClientException: Failed to fetch, uri=https://fonts.gstatic.com/s/a/d33c4f55184435de6dd2689c7de5c584345f30f0c3e71aac1ba192a947539b00.ttf
+If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+
+DartError: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/cab28147a27dac0ed15216e54ee741dba1d8d416e276bfc117ccdfbfe8eeeef5.ttf: ClientException: Failed to fetch, uri=https://fonts.gstatic.com/s/a/cab28147a27dac0ed15216e54ee741dba1d8d416e276bfc117ccdfbfe8eeeef5.ttf
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
+package:google_fonts/src/google_fonts_base.dart 266:5                             <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 623:19               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 648:23               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 598:5                <fn>
+dart-sdk/lib/async/zone.dart 967:54                                               runBinary
+dart-sdk/lib/async/future_impl.dart 237:22                                        handleError
+dart-sdk/lib/async/future_impl.dart 960:46                                        handleError
+dart-sdk/lib/async/future_impl.dart 981:13                                        _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 738:5                                         [_completeErrorObject]
+dart-sdk/lib/async/future_impl.dart 742:5                                         [_completeError]
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 511:7                completeError
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 582:12               _asyncRethrow
+package:http/src/base_client.dart 74:20                                           <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 623:19               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 648:23               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 598:5                <fn>
+dart-sdk/lib/async/zone.dart 967:54                                               runBinary
+dart-sdk/lib/async/future_impl.dart 237:22                                        handleError
+dart-sdk/lib/async/future_impl.dart 960:46                                        handleError
+dart-sdk/lib/async/future_impl.dart 981:13                                        _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 738:5                                         [_completeErrorObject]
+dart-sdk/lib/async/future_impl.dart 742:5                                         [_completeError]
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 511:7                completeError
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 582:12               _asyncRethrow
+package:http/src/browser_client.dart 133:3                                        <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 623:19               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 648:23               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 598:5                <fn>
+dart-sdk/lib/async/zone.dart 967:54                                               runBinary
+dart-sdk/lib/async/future_impl.dart 237:22                                        handleError
+dart-sdk/lib/async/future_impl.dart 960:46                                        handleError
+dart-sdk/lib/async/future_impl.dart 981:13                                        _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 738:5                                         [_completeErrorObject]
+dart-sdk/lib/async/future_impl.dart 832:7                                         <fn>
+dart-sdk/lib/async/schedule_microtask.dart 40:34                                  _microtaskLoop
+dart-sdk/lib/async/schedule_microtask.dart 49:5                                   _startMicrotaskLoop
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 188:69               <fn>
+DartError: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d33c4f55184435de6dd2689c7de5c584345f30f0c3e71aac1ba192a947539b00.ttf: ClientException: Failed to fetch, uri=https://fonts.gstatic.com/s/a/d33c4f55184435de6dd2689c7de5c584345f30f0c3e71aac1ba192a947539b00.ttf
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
+package:google_fonts/src/google_fonts_base.dart 266:5                             <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 623:19               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 648:23               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 598:5                <fn>
+dart-sdk/lib/async/zone.dart 967:54                                               runBinary
+dart-sdk/lib/async/future_impl.dart 237:22                                        handleError
+dart-sdk/lib/async/future_impl.dart 960:46                                        handleError
+dart-sdk/lib/async/future_impl.dart 981:13                                        _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 738:5                                         [_completeErrorObject]
+dart-sdk/lib/async/future_impl.dart 742:5                                         [_completeError]
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 511:7                completeError
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 582:12               _asyncRethrow
+package:http/src/base_client.dart 74:20                                           <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 623:19               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 648:23               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 598:5                <fn>
+dart-sdk/lib/async/zone.dart 967:54                                               runBinary
+dart-sdk/lib/async/future_impl.dart 237:22                                        handleError
+dart-sdk/lib/async/future_impl.dart 960:46                                        handleError
+dart-sdk/lib/async/future_impl.dart 981:13                                        _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 738:5                                         [_completeErrorObject]
+dart-sdk/lib/async/future_impl.dart 742:5                                         [_completeError]
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 511:7                completeError
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 582:12               _asyncRethrow
+package:http/src/browser_client.dart 133:3                                        <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 623:19               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 648:23               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 598:5                <fn>
+dart-sdk/lib/async/zone.dart 967:54                                               runBinary
+dart-sdk/lib/async/future_impl.dart 237:22                                        handleError
+dart-sdk/lib/async/future_impl.dart 960:46                                        handleError
+dart-sdk/lib/async/future_impl.dart 981:13                                        _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 738:5                                         [_completeErrorObject]
+dart-sdk/lib/async/future_impl.dart 832:7                                         <fn>
+dart-sdk/lib/async/schedule_microtask.dart 40:34                                  _microtaskLoop
+dart-sdk/lib/async/schedule_microtask.dart 49:5                                   _startMicrotaskLoop
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 188:69               <fn>
+ΓòÉΓòÉΓòí EXCEPTION CAUGHT BY WIDGETS LIBRARY Γò₧ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+The following assertion was thrown while finalizing the widget tree:
+_SplashScreenState#3a653(ticker active) was disposed with an active Ticker.
+_SplashScreenState created a Ticker via its SingleTickerProviderStateMixin, but at the time
+dispose() was called on the mixin, that Ticker was still active. The Ticker must be disposed before
+calling super.dispose().
+Tickers used by AnimationControllers should be disposed by calling dispose() on the
+AnimationController itself. Otherwise, the ticker will leak.
+The offending ticker was:
+  Ticker(created by _SplashScreenState#3a653)
+  The stack trace when the Ticker was actually created was:
+  dart-sdk/lib/_internal/js_dev_runtime/patch/core_patch.dart 749:28       get current
+  package:flutter/src/scheduler/ticker.dart 86:40                          <fn>
+  package:flutter/src/scheduler/ticker.dart 87:14                          new
+  package:flutter/src/widgets/ticker_provider.dart 341:15                  createTicker
+  package:flutter/src/animation/animation_controller.dart 257:20           new
+  package:real_estate/View/splash_screen.dart 26:18                        initState
+  package:flutter/src/widgets/framework.dart 5950:55                       [_firstBuild]
+  package:flutter/src/widgets/framework.dart 5793:5                        mount
+  ...     Normal element mounting (234 frames)
+  package:flutter/src/widgets/framework.dart 4587:19                       inflateWidget
+  package:flutter/src/widgets/framework.dart 7264:36                       inflateWidget
+  package:flutter/src/widgets/framework.dart 7279:32                       mount
+  ...     Normal element mounting (577 frames)
+  package:flutter/src/widgets/framework.dart 4587:19                       inflateWidget
+  package:flutter/src/widgets/framework.dart 4059:18                       updateChild
+  package:flutter/src/widgets/view.dart 481:16                             [_updateChild]
+  package:flutter/src/widgets/view.dart 504:5                              mount
+  ...     Normal element mounting (15 frames)
+  package:flutter/src/widgets/framework.dart 4587:19                       inflateWidget
+  package:flutter/src/widgets/framework.dart 4059:18                       updateChild
+  package:flutter/src/widgets/binding.dart 1822:16                         [_rebuild]
+  package:flutter/src/widgets/binding.dart 1791:5                          mount
+  package:flutter/src/widgets/binding.dart 1744:16                         <fn>
+  package:flutter/src/widgets/framework.dart 3101:11                       buildScope
+  package:flutter/src/widgets/binding.dart 1743:12                         attach
+  package:flutter/src/widgets/binding.dart 1419:26                         attachToBuildOwner
+  package:flutter/src/widgets/binding.dart 1404:5                          attachRootWidget
+  package:flutter/src/widgets/binding.dart 1390:7                          <fn>
+  dart-sdk/lib/_internal/js_dev_runtime/private/isolate_helper.dart 47:11  internalCallback
+
+When the exception was thrown, this was the stack:
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
+package:flutter/src/widgets/ticker_provider.dart 356:7                            <fn>
+package:flutter/src/widgets/ticker_provider.dart 368:35                           dispose
+package:flutter/src/widgets/framework.dart 6030:5                                 unmount
+package:flutter/src/widgets/framework.dart 2117:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 7101:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+package:flutter/src/widgets/framework.dart 2115:7                                 <fn>
+package:flutter/src/widgets/framework.dart 5871:7                                 visitChildren
+package:flutter/src/widgets/framework.dart 2113:12                                _unmount
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+dart-sdk/lib/internal/iterable.dart 49:7                                          forEach
+package:flutter/src/widgets/framework.dart 2126:15                                [_unmountAll]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+package:flutter/src/widgets/framework.dart 3020:7                                 lockState
+package:flutter/src/widgets/framework.dart 3344:7                                 finalizeTree
+package:flutter/src/widgets/binding.dart 1309:7                                   drawFrame
+package:flutter/src/rendering/binding.dart 495:5                                  [_handlePersistentFrameCallback]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+package:flutter/src/scheduler/binding.dart 1430:7                                 [_invokeFrameCallback]
+package:flutter/src/scheduler/binding.dart 1345:9                                 handleDrawFrame
+package:flutter/src/scheduler/binding.dart 1198:5                                 [_handleDrawFrame]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+lib/_engine/engine/platform_dispatcher.dart 1689:5                                invoke
+lib/_engine/engine/platform_dispatcher.dart 265:5                                 invokeOnDrawFrame
+lib/_engine/engine/frame_service.dart 209:32                                      [_renderFrame]
+lib/_engine/engine/frame_service.dart 117:9                                       <fn>
+dart-sdk/lib/async/zone.dart 962:54                                               runUnary
+dart-sdk/lib/async/zone.dart 917:26                                               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 224:27    _callDartFunctionFast1
+dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 84:15     ret
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Another exception was thrown: TypeError: Instance of 'ThemeService': type 'ThemeService' is not a subtype of type 'ThemeService'
+
+Performing hot restart...                                          656ms
+Recompile complete. No client connected.
+   656ms
+
+Application finished.
