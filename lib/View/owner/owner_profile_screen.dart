@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/profile_controller.dart';
 import '../../controller/logout_controller.dart';
+import '../../Service/theme_service.dart';
 import 'about_us_screen.dart';
 import 'edit_profile_screen.dart';
 import 'privacy_policy_screen.dart';
@@ -15,9 +16,9 @@ class OwnerProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ ربط ProfileController و LogoutController
     final ProfileController profileController = Get.put(ProfileController());
     final LogoutController logoutController = Get.put(LogoutController());
+    final ThemeService themeService = Get.find<ThemeService>();
 
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color bg = isDark ? const Color(0xff070B18) : const Color(0xffF6F7FB);
@@ -26,12 +27,25 @@ class OwnerProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bg,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode, color: text),
+          onPressed: () => themeService.toggleTheme(),
+        ),
+        title: Text(
+          "الملف الشخصي",
+          style: TextStyle(color: text, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              /// HEADER CARD - مع بيانات حقيقية من API
+              /// HEADER CARD
               Obx(() => Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -66,7 +80,6 @@ class OwnerProfileScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // ✅ اسم المستخدم من API
                               Text(
                                 profileController.userName.value.isEmpty
                                     ? "جاري التحميل..."
@@ -78,7 +91,6 @@ class OwnerProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 6),
-                              // ✅ رقم الهاتف من API
                               Text(
                                 profileController.userPhone.value.isEmpty
                                     ? "جاري التحميل..."
@@ -146,7 +158,7 @@ class OwnerProfileScreen extends StatelessWidget {
               }),
               const SizedBox(height: 30),
 
-              /// LOGOUT - مرتبط مع LogoutController
+              /// LOGOUT
               Obx(() => Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -187,7 +199,6 @@ class OwnerProfileScreen extends StatelessWidget {
     );
   }
 
-  /// TILE
   Widget _tile(
     BuildContext context,
     IconData icon,

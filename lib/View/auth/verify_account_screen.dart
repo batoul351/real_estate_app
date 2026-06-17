@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,10 +9,7 @@ class VerifyAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ ربط الـ Controller مع الواجهة
-    final VerifyController controller = Get.isRegistered<VerifyController>()
-        ? Get.find<VerifyController>()
-        : Get.put(VerifyController());
+    final VerifyController controller = Get.put(VerifyController());
 
     final ThemeService themeService = Get.find<ThemeService>();
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -30,23 +25,17 @@ class VerifyAccountScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            isDark ? Icons.light_mode : Icons.dark_mode,
-            color: text,
-          ),
-          onPressed: () {
-            themeService.toggleTheme();
-          },
+          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode, color: text),
+          onPressed: () => themeService.toggleTheme(),
         ),
       ),
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.all(22),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /// ICON
                 Container(
                   width: 110,
                   height: 110,
@@ -61,87 +50,66 @@ class VerifyAccountScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.mark_email_read_rounded,
-                    color: Colors.white,
-                    size: 55,
-                  ),
+                  child: const Icon(Icons.mark_email_read_rounded,
+                      color: Colors.white, size: 55),
                 ),
                 const SizedBox(height: 25),
-
-                /// TITLE
-                Text(
-                  "تحقق من حسابك",
-                  style: GoogleFonts.cairo(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: text,
-                  ),
-                ),
+                Text("تحقق من حسابك",
+                    style: GoogleFonts.cairo(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: text)),
                 const SizedBox(height: 10),
-
-                /// SUBTITLE
-                Text(
-                  "أدخل رمز التحقق المكون من 6 أرقام",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(fontSize: 14, color: sub),
-                ),
+                Text("أدخل رمز التحقق المكون من 6 أرقام",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.cairo(fontSize: 14, color: sub)),
                 const SizedBox(height: 30),
-
-                /// OTP FIELDS
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(6, (index) {
-                    return SizedBox(
-                      width: 48,
-                      height: 55,
-                      child: TextField(
-                        controller: controller.controllers[index],
-                        focusNode: controller.focusNodes[index],
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        maxLength: 1,
-                        style: GoogleFonts.cairo(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: text,
-                        ),
-                        onChanged: (value) {
-                          controller.nextField(index, value);
-                        },
-                        decoration: InputDecoration(
-                          counterText: "",
-                          filled: true,
-                          fillColor: isDark
-                              ? Colors.white.withOpacity(0.05)
-                              : Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(
-                              color: isDark ? Colors.white12 : Colors.black12,
+                  children: List.generate(
+                      6,
+                      (index) => SizedBox(
+                            width: 48,
+                            height: 55,
+                            child: TextField(
+                              controller: controller.controllers[index],
+                              focusNode: controller.focusNodes[index],
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              maxLength: 1,
+                              style: GoogleFonts.cairo(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: text),
+                              onChanged: (value) =>
+                                  controller.nextField(index, value),
+                              decoration: InputDecoration(
+                                counterText: "",
+                                filled: true,
+                                fillColor: isDark
+                                    ? Colors.white.withOpacity(0.05)
+                                    : Colors.white,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: BorderSide(
+                                        color: isDark
+                                            ? Colors.white12
+                                            : Colors.black12)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: BorderSide(
+                                        color: isDark
+                                            ? Colors.white12
+                                            : Colors.black12)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                    borderSide: const BorderSide(
+                                        color: primary, width: 1.5)),
+                              ),
                             ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(
-                              color: isDark ? Colors.white12 : Colors.black12,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: const BorderSide(
-                              color: primary,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
+                          )),
                 ),
                 const SizedBox(height: 20),
-
-                /// RESEND TIMER
                 Obx(() => Text(
                       controller.canResend.value
                           ? "لم يصلك رمز؟ أعد المحاولة"
@@ -149,25 +117,18 @@ class VerifyAccountScreen extends StatelessWidget {
                       style: GoogleFonts.cairo(color: sub, fontSize: 13),
                     )),
                 const SizedBox(height: 10),
-
-                /// RESEND BUTTON
                 Obx(() => TextButton(
                       onPressed: controller.canResend.value
                           ? () async {
                               await controller.resendCode();
                             }
                           : null,
-                      child: Text(
-                        "إعادة إرسال الرمز",
-                        style: GoogleFonts.cairo(
-                          color: controller.canResend.value ? accent : sub,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      child: Text("إعادة إرسال الرمز",
+                          style: GoogleFonts.cairo(
+                              color: controller.canResend.value ? accent : sub,
+                              fontWeight: FontWeight.w500)),
                     )),
                 const SizedBox(height: 20),
-
-                /// VERIFY BUTTON
                 SizedBox(
                   width: double.infinity,
                   height: 55,
@@ -178,28 +139,20 @@ class VerifyAccountScreen extends StatelessWidget {
                                 await controller.verifyEmail();
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
+                            backgroundColor: primary,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16))),
                         child: controller.loading.value
                             ? const SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(
-                                "تأكيد الحساب",
+                                    color: Colors.white, strokeWidth: 2))
+                            : Text("تأكيد الحساب",
                                 style: GoogleFonts.cairo(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
                       )),
                 ),
               ],

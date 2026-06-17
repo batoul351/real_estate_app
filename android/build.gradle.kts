@@ -1,3 +1,16 @@
+// 👇 أضف هذه الكتلة في أول الملف تماماً فوق كل شيء مسبقاً
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // حزمة المساعدة الخاصة بـ Google Services لربط الـ Firebase
+        classpath("com.google.gms:google-services:4.4.2")
+    }
+}
+
+// الأكواد القديمة الخاصة بك تبقى كما هي تماماً تحتها 👇
 allprojects {
     repositories {
         google()

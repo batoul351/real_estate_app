@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controller/forgot_password_controller.dart';
 import '../../Service/theme_service.dart';
+import 'owner_login_screen.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -10,7 +11,7 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ForgotPasswordController controller =
-        Get.find<ForgotPasswordController>();
+        Get.put(ForgotPasswordController());
 
     final ThemeService themeService = Get.find<ThemeService>();
 
@@ -27,13 +28,8 @@ class ForgotPasswordScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            isDark ? Icons.light_mode : Icons.dark_mode,
-            color: text,
-          ),
-          onPressed: () {
-            themeService.toggleTheme();
-          },
+          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode, color: text),
+          onPressed: () => themeService.toggleTheme(),
         ),
       ),
       body: SafeArea(
@@ -47,7 +43,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   height: 95,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(colors: [primary, accent]),
+                    gradient: LinearGradient(colors: [primary, accent]),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.25),
@@ -65,17 +61,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                       )),
                 ),
                 const SizedBox(height: 18),
-
-                Text(
-                  "إعادة تعيين كلمة المرور",
-                  style: GoogleFonts.cairo(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: text,
-                  ),
-                ),
+                Text("إعادة تعيين كلمة المرور",
+                    style: GoogleFonts.cairo(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: text)),
                 const SizedBox(height: 6),
-
                 Obx(() => Text(
                       controller.codeSent.value
                           ? "أدخل الرمز وكلمة المرور الجديدة"
@@ -84,7 +75,6 @@ class ForgotPasswordScreen extends StatelessWidget {
                       style: GoogleFonts.cairo(fontSize: 14, color: sub),
                     )),
                 const SizedBox(height: 30),
-
                 Container(
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
@@ -105,52 +95,39 @@ class ForgotPasswordScreen extends StatelessWidget {
                         children: [
                           if (!controller.codeSent.value) ...[
                             _field(
-                              controller: controller.emailController,
-                              hint: "البريد الإلكتروني",
-                              icon: Icons.email_rounded,
-                              isDark: isDark,
-                              text: text,
-                              sub: sub,
-                            ),
+                                controller.emailController,
+                                "البريد الإلكتروني",
+                                Icons.email_rounded,
+                                isDark,
+                                text,
+                                sub),
                             const SizedBox(height: 20),
-                            _button(
-                              text: "إرسال الرمز",
-                              loading: controller.loading.value,
-                              onPressed: () async {
-                                await controller.sendResetCode();
-                              },
-                              primary: primary,
-                            ),
+                            _button("إرسال الرمز", controller.loading.value,
+                                () async {
+                              await controller.sendResetCode();
+                            }, primary),
                           ],
                           if (controller.codeSent.value) ...[
-                            _field(
-                              controller: controller.codeController,
-                              hint: "رمز التحقق",
-                              icon: Icons.pin,
-                              isDark: isDark,
-                              text: text,
-                              sub: sub,
-                            ),
+                            _field(controller.codeController, "رمز التحقق",
+                                Icons.pin, isDark, text, sub),
                             const SizedBox(height: 12),
                             _passwordField(
-                              controller: controller.newPasswordController,
-                              hint: "كلمة المرور الجديدة",
-                              obscure: controller.obscureNewPassword,
-                              onToggle: controller.toggleNewPassword,
-                              isDark: isDark,
-                              text: text,
-                              sub: sub,
-                            ),
+                                controller.newPasswordController,
+                                "كلمة المرور الجديدة",
+                                controller.obscureNewPassword,
+                                controller.toggleNewPassword,
+                                isDark,
+                                text,
+                                sub),
                             const SizedBox(height: 12),
                             _passwordField(
-                              controller: controller.confirmPasswordController,
-                              hint: "تأكيد كلمة المرور",
-                              obscure: controller.obscureConfirmPassword,
-                              onToggle: controller.toggleConfirmPassword,
-                              isDark: isDark,
-                              text: text,
-                              sub: sub,
-                            ),
+                                controller.confirmPasswordController,
+                                "تأكيد كلمة المرور",
+                                controller.obscureConfirmPassword,
+                                controller.toggleConfirmPassword,
+                                isDark,
+                                text,
+                                sub),
                             const SizedBox(height: 20),
                             SizedBox(
                               width: double.infinity,
@@ -162,28 +139,22 @@ class ForgotPasswordScreen extends StatelessWidget {
                                             await controller.resetPassword();
                                           },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                    ),
+                                        backgroundColor: primary,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16))),
                                     child: controller.loading.value
                                         ? const SizedBox(
                                             width: 20,
                                             height: 20,
                                             child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                              strokeWidth: 2,
-                                            ),
-                                          )
-                                        : Text(
-                                            "تغيير كلمة المرور",
+                                                color: Colors.white,
+                                                strokeWidth: 2))
+                                        : Text("تغيير كلمة المرور",
                                             style: GoogleFonts.cairo(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white)),
                                   )),
                             ),
                             const SizedBox(height: 10),
@@ -200,15 +171,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                                           await controller.sendResetCode();
                                         }
                                       : null,
-                                  child: Text(
-                                    "إعادة إرسال الرمز",
-                                    style: GoogleFonts.cairo(
-                                      color: controller.canResend.value
-                                          ? accent
-                                          : sub,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                                  child: Text("إعادة إرسال الرمز",
+                                      style: GoogleFonts.cairo(
+                                          color: controller.canResend.value
+                                              ? accent
+                                              : sub,
+                                          fontWeight: FontWeight.w500)),
                                 )),
                           ],
                         ],
@@ -216,10 +184,15 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 18),
 
-                // ✅ Get.back() بدلاً من Get.offAllNamed
+                /// ✅ زر العودة لتسجيل الدخول (معدل نهائياً)
                 TextButton(
                   onPressed: () {
-                    Get.back();
+                    // حذف الـ ForgotPasswordController عند العودة
+                    if (Get.isRegistered<ForgotPasswordController>()) {
+                      Get.delete<ForgotPasswordController>();
+                    }
+                    // ✅ لا تحذف LoginController لأنه يستخدم fenix: true
+                    Get.offAllNamed('/login');
                   },
                   child: Text(
                     "العودة لتسجيل الدخول",
@@ -234,98 +207,73 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 
-  Widget _field({
-    required TextEditingController controller,
-    required String hint,
-    required IconData icon,
-    required bool isDark,
-    required Color text,
-    required Color sub,
-  }) {
+  Widget _field(TextEditingController c, String h, IconData icon, bool isDark,
+      Color text, Color sub) {
     return TextField(
-      controller: controller,
+      controller: c,
       style: TextStyle(color: text),
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: sub),
-        hintText: hint,
+        hintText: h,
         hintStyle: TextStyle(color: sub),
         filled: true,
         fillColor:
             isDark ? Colors.white.withOpacity(0.05) : const Color(0xffF1F5F9),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
-        ),
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none),
       ),
     );
   }
 
-  Widget _passwordField({
-    required TextEditingController controller,
-    required String hint,
-    required RxBool obscure,
-    required VoidCallback onToggle,
-    required bool isDark,
-    required Color text,
-    required Color sub,
-  }) {
+  Widget _passwordField(TextEditingController c, String h, RxBool obscure,
+      VoidCallback toggle, bool isDark, Color text, Color sub) {
     return Obx(() => TextField(
-          controller: controller,
+          controller: c,
           obscureText: obscure.value,
           style: TextStyle(color: text),
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.lock_rounded, color: sub),
             suffixIcon: IconButton(
-              onPressed: onToggle,
-              icon: Icon(
-                  obscure.value ? Icons.visibility_off : Icons.visibility,
-                  color: sub),
-            ),
-            hintText: hint,
+                onPressed: toggle,
+                icon: Icon(
+                    obscure.value ? Icons.visibility_off : Icons.visibility,
+                    color: sub)),
+            hintText: h,
             hintStyle: TextStyle(color: sub),
             filled: true,
             fillColor: isDark
                 ? Colors.white.withOpacity(0.05)
                 : const Color(0xffF1F5F9),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
-            ),
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none),
           ),
         ));
   }
 
-  Widget _button({
-    required String text,
-    required bool loading,
-    required VoidCallback onPressed,
-    required Color primary,
-  }) {
+  Widget _button(
+      String text, bool loading, VoidCallback onPressed, Color primary) {
     return SizedBox(
       width: double.infinity,
       height: 55,
       child: ElevatedButton(
         onPressed: loading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: primary,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        ),
+            backgroundColor: primary,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16))),
         child: loading
             ? const SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
-                    color: Colors.white, strokeWidth: 2),
-              )
-            : Text(
-                text,
+                    color: Colors.white, strokeWidth: 2))
+            : Text(text,
                 style: GoogleFonts.cairo(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
       ),
     );
   }

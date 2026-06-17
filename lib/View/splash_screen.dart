@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                 /// Tagline
                 Text(
-                  'بيع • شراء • استثمار • إيجار',
+                  'بيع • شراء • إيجار',
                   style: GoogleFonts.cairo(
                     color: sub,
                     fontSize: 16,

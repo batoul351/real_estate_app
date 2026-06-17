@@ -5,25 +5,23 @@ import 'package:get_storage/get_storage.dart';
 
 class VerifyController extends GetxController {
   final storage = GetStorage();
-  final dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.1.106:8000',
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {'Content-Type': 'application/json'},
-  ));
+  final Dio dio = Get.find<Dio>(); // ✅ استخدام Dio من main
 
   var loading = false.obs;
   var email = ''.obs;
   var timerSeconds = 60.obs;
   var canResend = false.obs;
 
-  final List<TextEditingController> controllers =
-      List.generate(6, (_) => TextEditingController());
-  final List<FocusNode> focusNodes = List.generate(6, (_) => FocusNode());
+  late final List<TextEditingController> controllers;
+  late final List<FocusNode> focusNodes;
 
   @override
   void onInit() {
     super.onInit();
+
+    controllers = List.generate(6, (_) => TextEditingController());
+    focusNodes = List.generate(6, (_) => FocusNode());
+
     if (Get.arguments != null) {
       email.value = Get.arguments['email'] ?? '';
     }
@@ -33,12 +31,18 @@ class VerifyController extends GetxController {
   void _startTimer() {
     timerSeconds.value = 60;
     canResend.value = false;
+    _runTimer();
+  }
+
+  void _runTimer() {
     Future.delayed(const Duration(seconds: 1), () {
-      if (timerSeconds.value > 0) {
-        timerSeconds.value--;
-        _startTimer();
-      } else {
-        canResend.value = true;
+      if (!isClosed) {
+        if (timerSeconds.value > 0) {
+          timerSeconds.value--;
+          _runTimer();
+        } else {
+          canResend.value = true;
+        }
       }
     });
   }
@@ -91,36 +95,21 @@ class VerifyController extends GetxController {
 
         _showMessage('تم تفعيل الحساب بنجاح');
 
-        final String role = data['user']['role'].toString();
-
-        switch (role) {
-          case 'owner':
-            Get.offAllNamed('/owner-home');
-            break;
-          case 'customer':
-            Get.offAllNamed('/customer-home'); // ✅ customer يروح لشاشته
-            break;
-          case 'partner':
-            Get.offAllNamed('/owner-home');
-            break;
-          case 'admin':
-            Get.offAllNamed('/owner-home');
-            break;
-          default:
-            _showMessage('دور المستخدم غير معروف: $role', isError: true);
+        final String role = data['user']['role'];
+        if (role == 'owner') {
+          Get.offAllNamed('/owner-home');
+        } else {
+          Get.offAllNamed('/owner-home');
         }
       } else {
         _showMessage(response.data['message'] ?? 'رمز التحقق غير صحيح',
             isError: true);
       }
     } on DioException catch (e) {
-      String errorMessage = 'خطأ في الاتصال بالخادم';
-      if (e.response != null && e.response!.data != null) {
-        errorMessage = e.response!.data['message'] ?? errorMessage;
-      }
-      _showMessage(errorMessage, isError: true);
+      _showMessage(e.response?.data['message'] ?? 'خطأ في الاتصال',
+          isError: true);
     } finally {
-      loading.value = false;
+      if (!isClosed) loading.value = false;
     }
   }
 
@@ -144,31 +133,36 @@ class VerifyController extends GetxController {
         _showMessage('تم إعادة إرسال رمز التحقق');
         timerSeconds.value = 60;
         canResend.value = false;
-        _startTimer();
+        _runTimer();
 
         for (var controller in controllers) {
           controller.clear();
         }
-        FocusScope.of(Get.context!).requestFocus(focusNodes[0]);
+        if (Get.context != null) {
+          FocusScope.of(Get.context!).requestFocus(focusNodes[0]);
+        }
       } else {
         _showMessage('فشل إعادة الإرسال', isError: true);
       }
     } on DioException catch (e) {
-      _showMessage('خطأ في الاتصال بالخادم', isError: true);
+      _showMessage(e.response?.data['message'] ?? 'خطأ في الاتصال',
+          isError: true);
     } finally {
-      loading.value = false;
+      if (!isClosed) loading.value = false;
     }
   }
 
   void _showMessage(String msg, {bool isError = false}) {
-    Get.snackbar(
-      isError ? 'خطأ' : 'نجاح',
-      msg,
-      backgroundColor: isError ? Colors.red : Colors.green,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 3),
-    );
+    if (Get.context != null) {
+      Get.snackbar(
+        isError ? 'خطأ' : 'نجاح',
+        msg,
+        backgroundColor: isError ? Colors.red : Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 
   @override

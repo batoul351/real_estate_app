@@ -5,23 +5,28 @@ import 'package:get_storage/get_storage.dart';
 
 class RegisterController extends GetxController {
   final storage = GetStorage();
-  final dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.1.106:8000',
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {'Content-Type': 'application/json'},
-  ));
+  final Dio dio = Get.find<Dio>(); // ✅ استخدام Dio من main
 
   var loading = false.obs;
   var obscurePassword = true.obs;
   var obscureConfirm = true.obs;
   var selectedRole = 'owner'.obs;
 
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
-  final confirmController = TextEditingController();
+  late final TextEditingController nameController;
+  late final TextEditingController phoneController;
+  late final TextEditingController emailController;
+  late final TextEditingController passController;
+  late final TextEditingController confirmController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    nameController = TextEditingController();
+    phoneController = TextEditingController();
+    emailController = TextEditingController();
+    passController = TextEditingController();
+    confirmController = TextEditingController();
+  }
 
   void toggleObscurePassword() {
     obscurePassword.value = !obscurePassword.value;
@@ -74,37 +79,31 @@ class RegisterController extends GetxController {
 
       if (response.statusCode == 201) {
         _showMessage('تم إنشاء الحساب بنجاح. يرجى التحقق من بريدك الإلكتروني.');
-        Get.toNamed('/verify', arguments: {
-          'email': emailController.text.trim(),
-        });
+        Get.toNamed('/verify',
+            arguments: {'email': emailController.text.trim()});
       } else {
-        String errorMessage = response.data['message'] ?? 'فشل إنشاء الحساب';
-        _showMessage(errorMessage, isError: true);
+        _showMessage(response.data['message'] ?? 'فشل إنشاء الحساب',
+            isError: true);
       }
     } on DioException catch (e) {
-      String errorMessage = 'خطأ في الاتصال بالخادم';
-      if (e.response != null && e.response!.data != null) {
-        if (e.response!.data['errors'] != null) {
-          errorMessage = e.response!.data['errors'].values.first[0];
-        } else {
-          errorMessage = e.response!.data['message'] ?? errorMessage;
-        }
-      }
-      _showMessage(errorMessage, isError: true);
+      _showMessage(e.response?.data['message'] ?? 'خطأ في الاتصال',
+          isError: true);
     } finally {
-      loading.value = false;
+      if (!isClosed) loading.value = false;
     }
   }
 
   void _showMessage(String msg, {bool isError = false}) {
-    Get.snackbar(
-      isError ? 'خطأ' : 'نجاح',
-      msg,
-      backgroundColor: isError ? Colors.red : Colors.green,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 3),
-    );
+    if (Get.context != null) {
+      Get.snackbar(
+        isError ? 'خطأ' : 'نجاح',
+        msg,
+        backgroundColor: isError ? Colors.red : Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 
   @override

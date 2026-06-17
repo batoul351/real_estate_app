@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'add_property_screen.dart';
 import 'owner_properties_screen.dart';
@@ -13,7 +14,6 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
   late Animation<double> fade;
   late Animation<Offset> slide;
 
@@ -45,12 +45,27 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  // ✅ دالة الاتصال
+  Future<void> _makePhoneCall() async {
+    final String phoneNumber = '0961234567';
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      _showSnackbar('لا يمكن إجراء المكالمة');
+    }
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
     final text = isDark ? Colors.white : const Color(0xff0F172A);
-
     const primary = Color(0xff1E3A8A);
     const accent = Color(0xff0F766E);
 
@@ -64,7 +79,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             child: ListView(
               padding: const EdgeInsets.all(18),
               children: [
-                /// HEADER CARD (بدون "لوحة التحكم")
+                /// HEADER CARD
                 Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: 30,
@@ -83,7 +98,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 30),
 
                 /// QUICK ACTIONS TITLE
@@ -95,7 +109,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     color: text,
                   ),
                 ),
-
                 const SizedBox(height: 18),
 
                 /// ACTION 1
@@ -115,7 +128,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     },
                   ),
                 ),
-
                 const SizedBox(height: 16),
 
                 /// ACTION 2
@@ -135,16 +147,14 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     },
                   ),
                 ),
-
                 const SizedBox(height: 30),
 
                 /// INFO SECTION
                 Container(
                   padding: const EdgeInsets.all(22),
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.05)
-                        : Colors.white,
+                    color:
+                        isDark ? Colors.white.withOpacity(0.05) : Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -172,9 +182,34 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                           color: isDark ? Colors.white70 : Colors.black54,
                         ),
                       ),
+                      const SizedBox(height: 16),
+
+                      /// ✅ زر اتصال (بدلاً من واتساب)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: _makePhoneCall,
+                          icon: const Icon(Icons.call_rounded,
+                              color: Colors.white, size: 20),
+                          label: const Text(
+                            "اتصل بنا",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -201,7 +236,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 
-  /// action card (كبرناها)
+  /// action card
   Widget _action({
     required IconData icon,
     required String title,
@@ -233,4 +268,3 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 }
-

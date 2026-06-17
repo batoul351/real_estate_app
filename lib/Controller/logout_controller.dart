@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class LogoutController extends GetxController {
   final storage = GetStorage();
   final dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.1.106:8000',
+    baseUrl: 'http://192.168.1.24:8000',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {'Content-Type': 'application/json'},

@@ -5,17 +5,32 @@ import 'package:get_storage/get_storage.dart';
 
 class LoginController extends GetxController {
   final GetStorage storage = GetStorage();
-  final Dio dio = Get.find<Dio>();
+  late final Dio dio;
 
   var loading = false.obs;
   var obscurePassword = true.obs;
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passController = TextEditingController();
+  late final TextEditingController emailController;
+  late final TextEditingController passController;
 
   @override
   void onInit() {
     super.onInit();
+
+    emailController = TextEditingController();
+    passController = TextEditingController();
+
+    try {
+      dio = Get.find<Dio>();
+    } catch (e) {
+      dio = Dio(BaseOptions(
+        baseUrl: 'http://192.168.1.24:8000',
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {'Content-Type': 'application/json'},
+      ));
+    }
+
     final token = storage.read('access_token');
     if (token != null && token.toString().isNotEmpty) {
       dio.options.headers['Authorization'] = 'Bearer $token';
@@ -53,61 +68,41 @@ class LoginController extends GetxController {
         _showMessage('تم تسجيل الدخول بنجاح');
 
         final String role = data['user']['role'].toString();
-
-        switch (role) {
-          case 'owner':
-            Get.offAllNamed('/owner-home');
-            break;
-          case 'customer':
-            Get.offAllNamed('/customer-home'); // ✅ customer يروح لشاشته
-            break;
-          case 'partner':
-            Get.offAllNamed('/owner-home');
-            break;
-          case 'admin':
-            Get.offAllNamed('/owner-home');
-            break;
-          default:
-            _showMessage('دور المستخدم غير معروف: $role', isError: true);
+        if (role == 'owner') {
+          Get.offAllNamed('/owner-home');
+        } else {
+          Get.offAllNamed('/owner-home');
         }
       } else {
         _showMessage(response.data['message'] ?? 'فشل تسجيل الدخول',
             isError: true);
       }
     } on DioException catch (e) {
-      String errorMessage = 'خطأ في الاتصال بالخادم';
-      if (e.response != null && e.response!.data != null) {
-        if (e.response!.data is Map && e.response!.data['message'] != null) {
-          errorMessage = e.response!.data['message'];
-        }
-      }
-      _showMessage(errorMessage, isError: true);
-    } catch (e) {
-      _showMessage(e.toString(), isError: true);
+      _showMessage(e.response?.data['message'] ?? 'خطأ في الاتصال',
+          isError: true);
     } finally {
       loading.value = false;
     }
   }
 
   void _showMessage(String msg, {bool isError = false}) {
-    Get.snackbar(
-      isError ? 'خطأ' : 'نجاح',
-      msg,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isError ? Colors.red : Colors.green,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-    );
+    if (Get.context != null) {
+      Get.snackbar(
+        isError ? 'خطأ' : 'نجاح',
+        msg,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: isError ? Colors.red : Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 
   @override
   void onClose() {
-    emailController.clear();
-    passController.clear();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      emailController.dispose();
-      passController.dispose();
-    });
+    // ✅ لا تتلف الـ Controllers هنا، بل اتركها
+    // emailController.dispose();
+    // passController.dispose();
     super.onClose();
   }
 }

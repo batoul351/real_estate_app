@@ -11,13 +11,17 @@ class PropertyController extends GetxController {
 
   var isLoading = false.obs;
   var offices = <Map<String, dynamic>>[].obs;
+  var properties = <Map<String, dynamic>>[].obs;
+
+  // ✅ استخدم نفس الرابط المستخدم في main.dart
+  String get baseUrl => 'http://192.168.1.24:8000'; // ✅ تم التعديل
 
   @override
   void onInit() {
     super.onInit();
 
     _dio = dio.Dio(dio.BaseOptions(
-      baseUrl: 'http://192.168.1.106:8000',
+      baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
       headers: {'Content-Type': 'application/json'},
@@ -29,9 +33,9 @@ class PropertyController extends GetxController {
     }
 
     fetchOffices();
+    fetchMyProperties();
   }
 
-  // ✅ جلب قائمة المكاتب العقارية فقط
   Future<void> fetchOffices() async {
     try {
       final response = await _dio.get('/api/offices');
@@ -44,7 +48,27 @@ class PropertyController extends GetxController {
     }
   }
 
-  // ✅ إضافة عقار جديد
+  Future<void> fetchMyProperties() async {
+    isLoading.value = true;
+    try {
+      final response = await _dio.get('/api/getproperties');
+      if (response.statusCode == 200) {
+        properties.value = List<Map<String, dynamic>>.from(
+          response.data['properties'] ?? [],
+        );
+        if (properties.isNotEmpty) {
+          print('📦 عدد العقارات: ${properties.length}');
+          print('📦 أول عقار: ${properties.first}');
+          print('🔑 المفاتيح: ${properties.first.keys}');
+        }
+      }
+    } catch (e) {
+      print('Error fetching properties: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<bool> addProperty({
     required String title,
     required String description,
@@ -97,6 +121,8 @@ class PropertyController extends GetxController {
       if (response.statusCode == 201) {
         _showMessage(response.data['message'] ?? 'تم إضافة العقار بنجاح',
             isError: false);
+        await Future.delayed(const Duration(seconds: 1));
+        await fetchMyProperties();
         return true;
       } else {
         _showMessage(response.data['message'] ?? 'فشل إضافة العقار',
@@ -110,12 +136,6 @@ class PropertyController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  // ❌ تم إزالة دوال:
-  // - fetchProperties()
-  // - updateProperty()
-  // - deleteProperty()
-  // - canEditDelete
 
   String _handleError(dio.DioException e) {
     if (e.response != null && e.response!.data != null) {

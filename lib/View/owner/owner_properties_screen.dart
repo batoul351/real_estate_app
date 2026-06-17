@@ -1,46 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../controller/property_controller.dart';
+import 'property_details_screen.dart';
 
 class OwnerPropertiesScreen extends StatelessWidget {
   const OwnerPropertiesScreen({super.key});
 
-  // ✅ بيانات وهمية للعقارات
-  final List<Map<String, dynamic>> mockProperties = const [
-    {
-      'id': 1,
-      'title': 'شقة فاخرة في المزة',
-      'region': 'دمشق - المزة',
-      'price_sp': 250000000,
-      'status': 'accepted',
-      'statusText': 'مقبول',
-      'statusColor': Colors.green,
-      'image': 'https://via.placeholder.com/400x200?text=Apartment',
-    },
-    {
-      'id': 2,
-      'title': 'فيلا في الربوة',
-      'region': 'دمشق - الربوة',
-      'price_sp': 500000000,
-      'status': 'pending',
-      'statusText': 'قيد المراجعة',
-      'statusColor': Colors.orange,
-      'image': 'https://via.placeholder.com/400x200?text=Villa',
-    },
-    {
-      'id': 3,
-      'title': 'محل تجاري في سوق الحميدية',
-      'region': 'دمشق - سوق الحميدية',
-      'price_sp': 150000000,
-      'status': 'rejected',
-      'statusText': 'مرفوض',
-      'statusColor': Colors.red,
-      'image': 'https://via.placeholder.com/400x200?text=Shop',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final PropertyController controller = Get.put(PropertyController());
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color textColor = isDark ? const Color(0xffF8FAFC) : Colors.black87;
     const Color primary = Color(0xff1E3A8A);
@@ -59,47 +28,86 @@ class OwnerPropertiesScreen extends StatelessWidget {
               GoogleFonts.cairo(fontWeight: FontWeight.bold, color: textColor),
         ),
       ),
-      body: mockProperties.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.home_work_outlined,
-                      size: 80, color: Colors.grey),
-                  const SizedBox(height: 16),
-                  Text("لا توجد عقارات حالياً",
-                      style: GoogleFonts.cairo(color: Colors.grey)),
-                ],
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: mockProperties.length,
-              itemBuilder: (context, index) {
-                final property = mockProperties[index];
-                return Card(
+      body: Obx(() {
+        if (controller.isLoading.value && controller.properties.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.properties.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.home_work_outlined,
+                    size: 80, color: Colors.grey),
+                const SizedBox(height: 16),
+                Text("لا توجد عقارات حالياً",
+                    style: GoogleFonts.cairo(color: Colors.grey)),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => controller.fetchMyProperties(),
+                  child: const Text("إعادة تحميل"),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: controller.fetchMyProperties,
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: controller.properties.length,
+            itemBuilder: (context, index) {
+              final property = controller.properties[index];
+              final String status = property['approval_status'] ?? 'pending';
+              final Color statusColor = status == 'accepted'
+                  ? Colors.green
+                  : (status == 'rejected' ? Colors.red : Colors.orange);
+              final String statusText = status == 'accepted'
+                  ? 'مقبول'
+                  : (status == 'rejected' ? 'مرفوض' : 'قيد المراجعة');
+
+              final String imageUrl = property['images'] != null &&
+                      property['images'].isNotEmpty
+                  ? '${controller.baseUrl}/storage/${property['images'][0]['image_path']}'
+                  : '';
+
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => PropertyDetailsScreen(property: property));
+                },
+                child: Card(
                   margin: const EdgeInsets.only(bottom: 16),
                   elevation: 2,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // صورة العقار
                       ClipRRect(
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(16)),
-                        child: Image.network(
-                          property['image'],
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            height: 180,
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.broken_image, size: 50),
-                          ),
-                        ),
+                        child: imageUrl.isNotEmpty
+                            ? Image.network(
+                                imageUrl,
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
+                                  height: 180,
+                                  color: Colors.grey[300],
+                                  child:
+                                      const Icon(Icons.broken_image, size: 50),
+                                ),
+                              )
+                            : Container(
+                                height: 180,
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.image_not_supported,
+                                    size: 50),
+                              ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16),
@@ -110,7 +118,7 @@ class OwnerPropertiesScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    property['title'],
+                                    property['title'] ?? 'بدون عنوان',
                                     style: GoogleFonts.cairo(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -122,14 +130,13 @@ class OwnerPropertiesScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: (property['statusColor'] as Color)
-                                        .withOpacity(0.15),
+                                    color: statusColor.withOpacity(0.15),
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Text(
-                                    property['statusText'],
+                                    statusText,
                                     style: GoogleFonts.cairo(
-                                      color: property['statusColor'],
+                                      color: statusColor,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -144,7 +151,7 @@ class OwnerPropertiesScreen extends StatelessWidget {
                                 const SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
-                                    property['region'],
+                                    property['region'] ?? 'موقع غير محدد',
                                     style:
                                         GoogleFonts.cairo(color: Colors.grey),
                                   ),
@@ -153,36 +160,24 @@ class OwnerPropertiesScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              '${property['price_sp']} ل.س',
+                              '${property['price_sp'] ?? 0} ل.س',
                               style: GoogleFonts.cairo(
                                 color: accent,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 14),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "عرض التفاصيل",
-                                  style: GoogleFonts.cairo(
-                                    color: const Color(0xff60A5FA),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Icon(Icons.arrow_forward_ios_rounded,
-                                    size: 18, color: Color(0xff60A5FA)),
-                              ],
-                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.toNamed('/add-property');

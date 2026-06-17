@@ -17,39 +17,31 @@ class AboutUsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       appBar: AppBar(
         title: const Text("من نحن"),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-
       body: Directionality(
         textDirection: TextDirection.rtl,
-
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
               /// HEADER
               Container(
                 padding: const EdgeInsets.all(20),
-
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(colors: [primary, accent]),
-
                   borderRadius: BorderRadius.circular(20),
                 ),
-
                 child: Text(
-                  "مكتب الحسن للعقارات",
+                  "Haven Syria 🏡",
                   style: GoogleFonts.cairo(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -60,11 +52,9 @@ class AboutUsScreen extends StatelessWidget {
               /// CONTENT
               Container(
                 padding: const EdgeInsets.all(22),
-
                 decoration: BoxDecoration(
                   color: bgCard,
                   borderRadius: BorderRadius.circular(22),
-
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
@@ -73,22 +63,25 @@ class AboutUsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 child: Text(
                   """
-مكتب الحسن للعقارات هو منصة متخصصة في إدارة وعرض العقارات بطريقة حديثة وسهلة وآمنة.
+Haven Syria منصة عقارية ذكية ومتخصصة في إدارة وعرض العقارات بطريقة حديثة وسهلة وآمنة.
 
-نهدف إلى تسهيل عملية التواصل بين مالك العقار والمكتب العقاري من خلال تجربة استخدام احترافية وسريعة.
+🎯 هدفنا:
+تسهيل عملية التواصل بين مالك العقار والمكتب العقاري من خلال تجربة استخدام احترافية وسريعة.
 
-يوفر التطبيق إمكانية إضافة العقارات، متابعة الطلبات، واستعراض حالة العقار بشكل مباشر.
+📋 ميزات التطبيق:
+• إضافة العقارات بسهولة
+• متابعة الطلبات لحظة بلحظة
+• استعراض حالة العقار بشكل مباشر
 
-رؤيتنا هي تقديم تجربة عقارية ذكية تساعد المستخدمين على إدارة عقاراتهم بسهولة وموثوقية.
+🌟 رؤيتنا:
+تقديم تجربة عقارية ذكية تساعد المستخدمين على إدارة عقاراتهم بسهولة وموثوقية في سوريا.
 
-نعمل دائماً على تطوير خدماتنا وتحسين جودة النظام لضمان أفضل تجربة ممكنة لجميع المستخدمين.
+🤝 نعمل دائماً على تطوير خدماتنا وتحسين جودة النظام لضمان أفضل تجربة ممكنة لجميع المستخدمين.
                   """,
-
                   style: GoogleFonts.cairo(
-                    fontSize: 18,
+                    fontSize: 17,
                     height: 2,
                     color: textColor,
                   ),

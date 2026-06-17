@@ -27,14 +27,14 @@ class LoginScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            isDark ? Icons.light_mode : Icons.dark_mode,
-            color: text,
-          ),
-          onPressed: () {
-            themeService.toggleTheme();
-          },
+          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode, color: text),
+          onPressed: () => themeService.toggleTheme(),
         ),
+        title: Text(
+          "تسجيل الدخول",
+          style: GoogleFonts.cairo(color: text, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Center(
@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                   height: 95,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(colors: [primary, accent]),
+                    gradient: LinearGradient(colors: [primary, accent]),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.25),
@@ -126,7 +126,6 @@ class LoginScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          // ✅ الانتقال لصفحة forgot-password
                           onPressed: () => Get.toNamed('/forgot-password'),
                           child: Text("نسيت كلمة المرور؟",
                               style: GoogleFonts.cairo(color: sub)),

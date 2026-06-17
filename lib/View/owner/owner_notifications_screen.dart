@@ -1,114 +1,162 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../controller/notification_controller.dart';
+import '../../Service/theme_service.dart';
 
 class OwnerNotificationsScreen extends StatelessWidget {
   const OwnerNotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final notifications = [
-      {
-        "title": "تم قبول العقار",
-        "subtitle": "تمت الموافقة على شقة حي النرجس",
-        "status": "accepted",
-        "date": "منذ ساعتين",
-      },
-      {
-        "title": "العقار قيد المراجعة",
-        "subtitle": "يتم الآن مراجعة فيلا حي الياسمين",
-        "status": "pending",
-        "date": "منذ 5 ساعات",
-      },
-      {
-        "title": "تم رفض العقار",
-        "subtitle": "تم رفض مكتب شارع الملك بسبب نقص الصور",
-        "status": "rejected",
-        "date": "أمس",
-      },
-      {
-        "title": "العقار قيد المراجعة",
-        "subtitle": "طلب إضافة استراحة جديدة تحت التدقيق",
-        "status": "pending",
-        "date": "منذ يومين",
-      },
-    ];
+    final NotificationController controller = Get.put(NotificationController());
+    final ThemeService themeService = Get.find<ThemeService>();
+
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color textColor = isDark ? Colors.white : const Color(0xff0F172A);
+    final Color subColor = isDark ? Colors.white70 : Colors.black54;
+    final Color cardBg = isDark ? Colors.white.withOpacity(0.05) : Colors.white;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("الإشعارات"), centerTitle: true),
+      backgroundColor:
+          isDark ? const Color(0xff070B18) : const Color(0xffF6F7FB),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode,
+              color: textColor),
+          onPressed: () => themeService.toggleTheme(),
+        ),
+        title: Text(
+          "الإشعارات",
+          style:
+              GoogleFonts.cairo(color: textColor, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.done_all, color: textColor),
+            tooltip: 'تحديد الكل كمقروء',
+            onPressed: () => controller.markAllNotificationsAsRead(),
+          )
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: () => controller.fetchNotifications(),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: notifications.length,
-        separatorBuilder: (_, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final item = notifications[index];
+          if (controller.notifications.isEmpty) {
+            return Center(
+              child: Text(
+                "لا توجد إشعارات حالياً",
+                style: GoogleFonts.cairo(color: subColor, fontSize: 16),
+              ),
+            );
+          }
 
-          return Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                // دائرة الحالة
-                Container(
-                  width: 14,
-                  height: 14,
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: controller.notifications.length,
+            separatorBuilder: (_, index) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final item = controller.notifications[index];
+
+              return GestureDetector(
+                onTap: () {
+                  controller.markAsRead(item.id, index);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(item["status"]!),
-                    shape: BoxShape.circle,
+                    color: item.isRead ? cardBg.withOpacity(0.5) : cardBg,
+                    borderRadius: BorderRadius.circular(16),
+                    border: item.isRead
+                        ? null
+                        : Border.all(
+                            color:
+                                _getStatusColor(item.status).withOpacity(0.4),
+                            width: 1.5,
+                          ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
-                ),
-
-                const SizedBox(width: 14),
-
-                // النصوص
-                Expanded(
-                  child: Column(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        item["title"]!,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                      // ✅ دائرة الحالة
+                      Container(
+                        width: 12,
+                        height: 12,
+                        margin: const EdgeInsets.only(top: 4),
+                        decoration: BoxDecoration(
+                          color: _getStatusColor(item.status),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+
+                      // ✅ المحتوى
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // ✅ العنوان
+                            Text(
+                              item.title,
+                              style: GoogleFonts.cairo(
+                                fontSize: 16,
+                                fontWeight: item.isRead
+                                    ? FontWeight.w500
+                                    : FontWeight.bold,
+                                color: textColor,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            // ✅ الرسالة
+                            Text(
+                              item.subtitle,
+                              style: GoogleFonts.cairo(
+                                fontSize: 14,
+                                color: subColor,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // ✅ التاريخ
+                            Text(
+                              item.dateHuman,
+                              style: GoogleFonts.cairo(
+                                fontSize: 12,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
 
-                      const SizedBox(height: 6),
-
-                      Text(
-                        item["subtitle"]!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Text(
-                        item["date"]!,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      // ✅ أيقونة الحالة
+                      Icon(
+                        item.isRead
+                            ? Icons.notifications_none_outlined
+                            : Icons.notifications_active_outlined,
+                        color: _getStatusColor(item.status),
+                        size: 24,
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(width: 10),
-
-                Icon(
-                  Icons.notifications_active_outlined,
-                  color: _getStatusColor(item["status"]!),
-                ),
-              ],
-            ),
+              );
+            },
           );
-        },
+        }),
       ),
     );
   }
@@ -116,17 +164,13 @@ class OwnerNotificationsScreen extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status) {
       case "accepted":
-        return Colors.green;
-
+        return Colors.green.shade400;
       case "pending":
-        return Colors.orange;
-
+        return Colors.orange.shade400;
       case "rejected":
-        return Colors.red;
-
+        return Colors.red.shade400;
       default:
-        return Colors.grey;
+        return Colors.grey.shade400;
     }
   }
 }
-
