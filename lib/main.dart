@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'Service/theme_service.dart';
 import 'View/splash_screen.dart';
 import 'View/auth/owner_login_screen.dart';
@@ -25,14 +24,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ تهيئة Firebase
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // ✅ تهيئة التخزين المحلي
   await GetStorage.init();
 
-  // ✅ تهيئة ThemeService
   final themeService = ThemeService();
   Get.put<ThemeService>(themeService, permanent: true);
 

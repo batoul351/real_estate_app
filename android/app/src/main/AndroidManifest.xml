@@ -13,6 +13,12 @@
         android:label="real_estate"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- ✅ مفتاح Google Maps API (أضف هذا) -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDAKUt_G45QAhOzM9SS5UH_nAZ6n9Wo7jM"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

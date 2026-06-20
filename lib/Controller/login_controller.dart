@@ -67,11 +67,19 @@ class LoginController extends GetxController {
 
         _showMessage('تم تسجيل الدخول بنجاح');
 
+        // ✅ التوجيه حسب الدور
         final String role = data['user']['role'].toString();
+
         if (role == 'owner') {
           Get.offAllNamed('/owner-home');
+        } else if (role == 'customer') {
+          Get.offAllNamed('/customer-home');
+        } else if (role == 'partner') {
+          Get.offAllNamed('/owner-home'); // أو صفحة الشريك
+        } else if (role == 'admin') {
+          Get.offAllNamed('/owner-home'); // أو صفحة الأدمن
         } else {
-          Get.offAllNamed('/owner-home');
+          Get.offAllNamed('/owner-home'); // القيمة الافتراضية
         }
       } else {
         _showMessage(response.data['message'] ?? 'فشل تسجيل الدخول',
@@ -100,9 +108,7 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    // ✅ لا تتلف الـ Controllers هنا، بل اتركها
-    // emailController.dispose();
-    // passController.dispose();
+    // ✅ لا تتلف الـ Controllers هنا
     super.onClose();
   }
 }

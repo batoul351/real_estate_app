@@ -4,9 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../controller/profile_controller.dart';
 import '../../controller/logout_controller.dart';
 import 'edit_customer_profile_screen.dart';
-import 'customer_favorites_screen.dart';
-import 'customer_properties_screen.dart';
-import 'property_data.dart';
+import '../../View/owner/privacy_policy_screen.dart';
+import '../../View/owner/about_us_screen.dart';
 
 class CustomerProfileScreen extends StatelessWidget {
   const CustomerProfileScreen({super.key});
@@ -26,6 +25,15 @@ class CustomerProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bg,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "الملف الشخصي",
+          style: GoogleFonts.cairo(color: text, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(22),
@@ -75,125 +83,7 @@ class CustomerProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  /// CARD INFO
-                  Container(
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? Colors.white.withOpacity(0.05)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                          color: isDark ? Colors.white12 : Colors.black12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(isDark ? 0.20 : 0.06),
-                          blurRadius: 25,
-                          offset: const Offset(0, 12),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        /// ✅ PHONE (من API)
-                        _item(
-                          icon: Icons.phone,
-                          title: profileController.userPhone.value.isEmpty
-                              ? "جاري التحميل..."
-                              : profileController.userPhone.value,
-                          text: text,
-                          sub: sub,
-                        ),
-                        _item(
-                          icon: Icons.favorite_rounded,
-                          title: "المفضلة (${favoriteProperties.length})",
-                          text: text,
-                          sub: sub,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) =>
-                                      const CustomerFavoritesScreen()),
-                            ).then((_) {
-                              // تحديث عند العودة
-                            });
-                          },
-                        ),
-                        _item(
-                          icon: Icons.home_work_rounded,
-                          title: "العقارات (${properties.length})",
-                          text: text,
-                          sub: sub,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) =>
-                                      const CustomerPropertiesScreen()),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  /// STATS
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? Colors.white.withOpacity(0.05)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                          color: isDark ? Colors.white12 : Colors.black12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(isDark ? 0.20 : 0.06),
-                          blurRadius: 25,
-                          offset: const Offset(0, 12),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "${favoriteProperties.length}",
-                              style: GoogleFonts.cairo(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
-                              ),
-                            ),
-                            Text("المفضلة",
-                                style: GoogleFonts.cairo(color: sub)),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "${properties.length}",
-                              style: GoogleFonts.cairo(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: primary,
-                              ),
-                            ),
-                            Text("العقارات",
-                                style: GoogleFonts.cairo(color: sub)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  /// ✅ EDIT BUTTON
+                  /// ✅ EDIT BUTTON (زر تعديل الملف الشخصي)
                   SizedBox(
                     width: double.infinity,
                     height: 55,
@@ -202,29 +92,82 @@ class CustomerProfileScreen extends StatelessWidget {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) =>
-                                  const EditCustomerProfileScreen()),
+                            builder: (_) => const EditCustomerProfileScreen(),
+                          ),
                         );
-                        await profileController
-                            .fetchProfile(); // تحديث البيانات
+                        await profileController.fetchProfile();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primary,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                       child: Text(
                         "تعديل الملف الشخصي",
                         style: GoogleFonts.cairo(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
 
-                  /// ✅ LOGOUT BUTTON
+                  /// ✅ PRIVACY POLICY BUTTON
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Get.to(() => const PrivacyPolicyScreen());
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: primary),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                        "سياسة الخصوصية",
+                        style: GoogleFonts.cairo(
+                          color: primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  /// ✅ ABOUT US BUTTON
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Get.to(() => const AboutUsScreen());
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: accent),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                        "من نحن",
+                        style: GoogleFonts.cairo(
+                          color: accent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  /// ✅ LOGOUT BUTTON (زر تسجيل الخروج)
                   SizedBox(
                     width: double.infinity,
                     height: 55,
@@ -237,21 +180,25 @@ class CustomerProfileScreen extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.red),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                       child: logoutController.isLoading.value
                           ? const SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
-                                  color: Colors.red, strokeWidth: 2),
+                                color: Colors.red,
+                                strokeWidth: 2,
+                              ),
                             )
                           : Text(
                               "تسجيل الخروج",
                               style: GoogleFonts.cairo(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                     ),
                   ),
@@ -259,23 +206,6 @@ class CustomerProfileScreen extends StatelessWidget {
               )),
         ),
       ),
-    );
-  }
-
-  Widget _item({
-    required IconData icon,
-    required String title,
-    required Color text,
-    required Color sub,
-    VoidCallback? onTap,
-  }) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(icon, color: const Color(0xff1E3A8A)),
-      title: Text(title,
-          style: GoogleFonts.cairo(color: text, fontWeight: FontWeight.w600)),
-      trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: sub),
-      onTap: onTap,
     );
   }
 }

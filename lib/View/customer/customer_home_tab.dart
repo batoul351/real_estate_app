@@ -1,372 +1,329 @@
 import 'package:flutter/material.dart';
-import 'property_data.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../controller/customer_property_controller.dart';
+import '../../controller/customer_favorites_controller.dart';
 import 'property_details_screen.dart';
 
-class CustomerHomeTab extends StatefulWidget {
+class CustomerHomeTab extends StatelessWidget {
   const CustomerHomeTab({super.key});
 
   @override
-  State<CustomerHomeTab> createState() =>
-      _CustomerHomeTabState();
-}
-
-class _CustomerHomeTabState
-    extends State<CustomerHomeTab> {
-
-  String selectedCategory = "الكل";
-  String searchText = "";
-
-  @override
   Widget build(BuildContext context) {
+    final CustomerPropertyController propertyController =
+        Get.find<CustomerPropertyController>();
+    final CustomerFavoritesController favoritesController =
+        Get.find<CustomerFavoritesController>();
 
-    final filtered = properties.where((p) {
-
-      final categoryMatch =
-          selectedCategory == "الكل" ||
-          p.type == selectedCategory;
-
-      final searchMatch =
-          p.title.toLowerCase().contains(
-                searchText.toLowerCase(),
-              );
-
-      return categoryMatch && searchMatch;
-    }).toList();
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bg = isDark ? const Color(0xff070B18) : const Color(0xffF6F7FB);
+    final Color text = isDark ? Colors.white : const Color(0xff0F172A);
+    final Color subText = isDark ? Colors.white70 : Colors.black54;
+    final Color cardColor = isDark ? const Color(0xff111827) : Colors.white;
+    const Color primary = Color(0xff1E3A8A);
+    const Color accent = Color(0xff0F766E);
 
     return Scaffold(
-      backgroundColor: const Color(0xff070B18),
-
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-
-          children: [
-
-            const Text(
-              "Welcome 👋",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
+      backgroundColor: bg,
+      body: Obx(() {
+        if (propertyController.isLoading.value &&
+            propertyController.properties.isEmpty) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: isDark ? Colors.white : primary,
             ),
+          );
+        }
 
-            const SizedBox(height: 5),
-
-            const Text(
-              "ابحث عن العقار المناسب لك",
-              style: TextStyle(
-                color: Colors.white70,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            TextField(
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-
-              onChanged: (value) {
-                setState(() {
-                  searchText = value;
-                });
-              },
-
-              decoration: InputDecoration(
-                hintText: "Search Property...",
-                hintStyle: const TextStyle(
-                  color: Colors.white38,
-                ),
-
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Colors.white54,
-                ),
-
-                filled: true,
-                fillColor: const Color(0xff111827),
-
-                border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              "Categories",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-
-              child: Row(
-                children: [
-                  _chip("الكل"),
-                  _chip("شقة"),
-                  _chip("فيلا"),
-                  _chip("مكتب"),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            const Text(
-              "Featured Properties",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            SizedBox(
-              height: 200,
-
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: properties.length,
-
-                itemBuilder: (_, index) {
-
-                  final property =
-                      properties[index];
-
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              PropertyDetailsScreen(
-                            property: property,
-                          ),
-                        ),
-                      );
-                    },
-
-                    child: Container(
-                      width: 250,
-                      margin:
-                          const EdgeInsets.only(
-                        right: 12,
-                      ),
-
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(20),
-
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            property.images.first,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-
-                      child: Container(
-                        padding:
-                            const EdgeInsets.all(
-                          12,
-                        ),
-
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(
-                            20,
-                          ),
-
-                          gradient:
-                              LinearGradient(
-                            begin:
-                                Alignment.bottomCenter,
-                            end:
-                                Alignment.topCenter,
-                            colors: [
-                              Colors.black87,
-                              Colors.transparent,
-                            ],
-                          ),
-                        ),
-
-                        child: Align(
-                          alignment:
-                              Alignment.bottomLeft,
-
-                          child: Text(
-                            property.title,
-                            style:
-                                const TextStyle(
-                              color:
-                                  Colors.white,
-                              fontSize: 18,
-                              fontWeight:
-                                  FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            const Text(
-              "Latest Properties",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            ...filtered.map(
-              (property) => Card(
-                color: const Color(
-                  0xff111827,
-                ),
-
-                margin:
-                    const EdgeInsets.only(
-                  bottom: 12,
-                ),
-
-                child: ListTile(
-
-                  leading: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(
-                      8,
-                    ),
-
-                    child: Image.network(
-                      property.images.first,
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
+        if (propertyController.properties.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.home_work_outlined,
+                    size: 80,
+                    color: isDark ? Colors.grey : Colors.grey.shade400),
+                const SizedBox(height: 16),
+                Text(
+                  'مرحباً بك في Haven Syria',
+                  style: GoogleFonts.cairo(
+                    color: text,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-
-                  title: Text(
-                    property.title,
-                    style:
-                        const TextStyle(
-                      color:
-                          Colors.white,
-                    ),
-                  ),
-
-                  subtitle: Text(
-                    "${property.city} - ${property.price}\$",
-                    style:
-                        const TextStyle(
-                      color:
-                          Colors.white70,
-                    ),
-                  ),
-
-                  trailing: IconButton(
-                    icon: Icon(
-                      favoriteProperties
-                              .contains(
-                            property,
-                          )
-                          ? Icons.favorite
-                          : Icons
-                              .favorite_border,
-                      color: Colors.red,
-                    ),
-
-                    onPressed: () {
-                      setState(() {
-
-                        if (favoriteProperties
-                            .contains(
-                          property,
-                        )) {
-
-                          favoriteProperties
-                              .remove(
-                            property,
-                          );
-
-                        } else {
-
-                          favoriteProperties
-                              .add(
-                            property,
-                          );
-                        }
-                      });
-                    },
-                  ),
-
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            PropertyDetailsScreen(
-                          property:
-                              property,
-                        ),
-                      ),
-                    );
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'لا توجد عقارات متاحة حالياً',
+                  style: GoogleFonts.cairo(color: subText),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    propertyController.fetchProperties();
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'إعادة تحميل',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
+          );
+        }
 
-  Widget _chip(String text) {
+        return RefreshIndicator(
+          onRefresh: propertyController.fetchProperties,
+          color: primary,
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: propertyController.properties.length,
+            itemBuilder: (context, index) {
+              final property = propertyController.properties[index];
+              final imageUrl = property['images'] != null &&
+                      property['images'].isNotEmpty
+                  ? '${propertyController.baseUrl}/storage/${property['images'][0]['url']}'
+                  : '';
+              final bool isFav = favoritesController.isFavorite(property['id']);
 
-    final selected =
-        selectedCategory == text;
-
-    return Padding(
-      padding:
-          const EdgeInsets.only(right: 8),
-
-      child: ChoiceChip(
-        label: Text(text),
-
-        selected: selected,
-
-        selectedColor:
-            const Color(0xff1E3A8A),
-
-        labelStyle: TextStyle(
-          color: selected
-              ? Colors.white
-              : Colors.black,
-        ),
-
-        onSelected: (_) {
-          setState(() {
-            selectedCategory = text;
-          });
-        },
-      ),
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => PropertyDetailsScreen(property: property));
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: cardColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ✅ الصورة
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                        child: imageUrl.isNotEmpty
+                            ? Image.network(
+                                imageUrl,
+                                height: 180,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (_, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(
+                                    height: 180,
+                                    color: Colors.grey[300],
+                                    child: const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (_, __, ___) => Container(
+                                  height: 180,
+                                  color: Colors.grey[300],
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 180,
+                                color: Colors.grey[300],
+                                child: const Icon(
+                                  Icons.image_not_supported,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                      ),
+                      // ✅ المعلومات
+                      Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    property['title'] ?? 'بدون عنوان',
+                                    style: GoogleFonts.cairo(
+                                      color: text,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    isFav
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: Colors.red,
+                                    size: 22,
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () async {
+                                    if (isFav) {
+                                      await favoritesController
+                                          .removeFromFavorites(property['id']);
+                                    } else {
+                                      await favoritesController
+                                          .addToFavorites(property['id']);
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            // ✅ المنطقة
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on_outlined,
+                                  size: 16,
+                                  color: subText,
+                                ),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    property['region'] ?? '',
+                                    style: GoogleFonts.cairo(
+                                      color: subText,
+                                      fontSize: 14,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            // ✅ السعر والمساحة والغرف
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: accent.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    '${property['price_sp'] ?? 0} ل.س',
+                                    style: GoogleFonts.cairo(
+                                      color: accent,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                if (property['area'] != null)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: primary.withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      '${property['area']} م²',
+                                      style: GoogleFonts.cairo(
+                                        color: primary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(width: 10),
+                                if (property['rooms_count'] != null)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.bed_outlined,
+                                          size: 14,
+                                          color: subText,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '${property['rooms_count']}',
+                                          style: GoogleFonts.cairo(
+                                            color: subText,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            // ✅ زر عرض التفاصيل
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'عرض التفاصيل',
+                                  style: GoogleFonts.cairo(
+                                    color: primary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }
