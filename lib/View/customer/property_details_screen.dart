@@ -77,6 +77,26 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     }
   }
 
+  // ============================================================
+  // ✅ الإصلاح: يحل مشكلة تكرار الدومين بروابط الصور (404)
+  // بعض السجلات بالباك اند مخزّن فيها رابط كامل جاهز (https://...)
+  // وبعضها مخزّن فيها مسار نسبي فقط (properties/x.png).
+  // قبل هيك كان الكود يحط baseUrl/storage/ فوق أي قيمة، حتى لو
+  // كانت أصلاً رابط كامل، فكان يصير دومين مكرر داخل دومين -> 404.
+  // ============================================================
+  String _resolveImageUrl(String rawUrl, String baseUrl) {
+    if (rawUrl.isEmpty) return '';
+
+    // الحالة 1: الباك اند رجّع رابط كامل جاهز أصلاً
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
+    }
+
+    // الحالة 2: مسار نسبي فقط -> لازم نضيف الدومين + /storage/
+    final cleanPath = rawUrl.startsWith('/') ? rawUrl.substring(1) : rawUrl;
+    return '$baseUrl/storage/$cleanPath';
+  }
+
   @override
   Widget build(BuildContext context) {
     final CustomerPropertyController controller =
@@ -196,31 +216,44 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             });
                           },
                           itemBuilder: (context, index) {
-                            final imagePath = images[index]['url'] ??
-                                images[index]['image_path'] ??
-                                '';
-                            final imageUrl =
-                                '${controller.baseUrl}/storage/$imagePath';
+                            final rawImagePath = (images[index]['url'] ??
+                                    images[index]['image_path'] ??
+                                    '')
+                                .toString();
+                            // ✅ الإصلاح مطبّق هون بدل التركيب اليدوي القديم
+                            final imageUrl = _resolveImageUrl(
+                                rawImagePath, controller.baseUrl);
                             return ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Image.network(
-                                imageUrl,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                loadingBuilder: (_, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    color: Colors.grey[300],
-                                    child: const Center(
-                                        child: CircularProgressIndicator()),
-                                  );
-                                },
-                                errorBuilder: (_, __, ___) => Container(
-                                  color: Colors.grey[300],
-                                  child:
-                                      const Icon(Icons.broken_image, size: 50),
-                                ),
-                              ),
+                              child: imageUrl.isNotEmpty
+                                  ? Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      loadingBuilder:
+                                          (_, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Container(
+                                          color: Colors.grey[300],
+                                          child: const Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        );
+                                      },
+                                      errorBuilder: (_, __, ___) => Container(
+                                        color: Colors.grey[300],
+                                        child: const Icon(Icons.broken_image,
+                                            size: 50),
+                                      ),
+                                    )
+                                  : Container(
+                                      color: Colors.grey[300],
+                                      child: const Icon(
+                                          Icons.image_not_supported,
+                                          size: 50),
+                                    ),
                             );
                           },
                         ),

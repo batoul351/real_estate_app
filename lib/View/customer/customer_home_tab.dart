@@ -8,6 +8,34 @@ import 'property_details_screen.dart';
 class CustomerHomeTab extends StatelessWidget {
   const CustomerHomeTab({super.key});
 
+  // ============================================================
+  // ✅ يحل مشكلة تكرار الدومين بروابط الصور (404)
+  // ============================================================
+  String _resolveImageUrl(String rawUrl, String baseUrl) {
+    if (rawUrl.isEmpty) return '';
+
+    // الحالة 1: الرابط كامل
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
+    }
+
+    // الحالة 2: مسار نسبي
+    String cleanPath = rawUrl;
+    if (!cleanPath.startsWith('/')) {
+      cleanPath = '/$cleanPath';
+    }
+    if (!cleanPath.startsWith('/storage/')) {
+      cleanPath = '/storage$cleanPath';
+    }
+
+    String cleanBaseUrl = baseUrl;
+    if (cleanBaseUrl.endsWith('/')) {
+      cleanBaseUrl = cleanBaseUrl.substring(0, cleanBaseUrl.length - 1);
+    }
+
+    return '$cleanBaseUrl$cleanPath';
+  }
+
   @override
   Widget build(BuildContext context) {
     final CustomerPropertyController propertyController =
@@ -86,10 +114,15 @@ class CustomerHomeTab extends StatelessWidget {
             itemCount: propertyController.properties.length,
             itemBuilder: (context, index) {
               final property = propertyController.properties[index];
-              final imageUrl = property['images'] != null &&
-                      property['images'].isNotEmpty
-                  ? '${propertyController.baseUrl}/storage/${property['images'][0]['url']}'
-                  : '';
+
+              // ✅ استخدام الدالة المساعدة
+              final rawImage =
+                  property['images'] != null && property['images'].isNotEmpty
+                      ? (property['images'][0]['url'] ?? '').toString()
+                      : '';
+              final imageUrl =
+                  _resolveImageUrl(rawImage, propertyController.baseUrl);
+
               final bool isFav = favoritesController.isFavorite(property['id']);
 
               return GestureDetector(

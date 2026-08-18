@@ -9,7 +9,7 @@ class CustomerPropertyController extends GetxController {
   var isLoading = false.obs;
   var properties = <Map<String, dynamic>>[].obs;
 
-  String get baseUrl => 'http://192.168.1.24:8000';
+  String get baseUrl => 'https://api-havensyria.softup.agency';
 
   @override
   void onInit() {

@@ -96,10 +96,14 @@ class VerifyController extends GetxController {
         _showMessage('تم تفعيل الحساب بنجاح');
 
         final String role = data['user']['role'];
+
+        // ✅ التوجيه الصحيح
         if (role == 'owner') {
           Get.offAllNamed('/owner-home');
+        } else if (role == 'customer') {
+          Get.offAllNamed('/customer-home');
         } else {
-          Get.offAllNamed('/owner-home');
+          Get.offAllNamed('/login');
         }
       } else {
         _showMessage(response.data['message'] ?? 'رمز التحقق غير صحيح',

@@ -18,23 +18,18 @@ import 'controller/login_controller.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print("📩 إشعار في الخلفية: ${message.notification?.title}");
+  print(" إشعار في الخلفية: ${message.notification?.title}");
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   await GetStorage.init();
-
   final themeService = ThemeService();
   Get.put<ThemeService>(themeService, permanent: true);
-
-  // ✅ تهيئة Dio
   final dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.1.24:8000',
+    baseUrl: 'https://api-havensyria.softup.agency',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {'Content-Type': 'application/json'},
@@ -53,12 +48,10 @@ void main() async {
 
   Get.put<Dio>(dio, permanent: true);
 
-  // ✅ تسجيل LoginController
   if (!Get.isRegistered<LoginController>()) {
     Get.put<LoginController>(LoginController(), permanent: true);
   }
 
-  // ✅ طلب صلاحيات الإشعارات
   await FirebaseMessaging.instance.requestPermission(
     alert: true,
     badge: true,

@@ -14,7 +14,7 @@ class PropertyController extends GetxController {
   var properties = <Map<String, dynamic>>[].obs;
 
   // ✅ استخدم نفس الرابط المستخدم في main.dart
-  String get baseUrl => 'http://192.168.1.24:8000'; // ✅ تم التعديل
+  String get baseUrl => 'https://api-havensyria.softup.agency'; // ✅ تم التعديل
 
   @override
   void onInit() {
@@ -57,9 +57,9 @@ class PropertyController extends GetxController {
           response.data['properties'] ?? [],
         );
         if (properties.isNotEmpty) {
-          print('📦 عدد العقارات: ${properties.length}');
-          print('📦 أول عقار: ${properties.first}');
-          print('🔑 المفاتيح: ${properties.first.keys}');
+          print(' عدد العقارات: ${properties.length}');
+          print(' أول عقار: ${properties.first}');
+          print(' المفاتيح: ${properties.first.keys}');
         }
       }
     } catch (e) {

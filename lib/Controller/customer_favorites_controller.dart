@@ -10,7 +10,7 @@ class CustomerFavoritesController extends GetxController {
   var favorites = <Map<String, dynamic>>[].obs;
   var favoriteIds = <int>[].obs;
 
-  String get baseUrl => 'http://192.168.1.24:8000';
+  String get baseUrl => 'https://api-havensyria.softup.agency';
 
   @override
   void onInit() {

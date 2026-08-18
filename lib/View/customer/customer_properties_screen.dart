@@ -113,8 +113,8 @@ class CustomerPropertiesScreen extends StatelessWidget {
                       (searchController.selectedType.value.isNotEmpty &&
                               searchController.selectedType.value != 'الكل') ||
                           searchController.selectedRegion.value.isNotEmpty ||
-                          searchController.minPrice.value > 0 ||
-                          searchController.maxPrice.value < 1000000000;
+                          searchController.isPriceSpFilterActive.value ||
+                          searchController.isPriceUsdFilterActive.value;
                   return InkWell(
                     onTap: () => _openFiltersSheet(context, searchController),
                     borderRadius: BorderRadius.circular(12),
@@ -194,10 +194,15 @@ class CustomerPropertiesScreen extends StatelessWidget {
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final property = searchController.searchResults[index];
-                    final imageUrl = property['images'] != null &&
-                            property['images'].isNotEmpty
-                        ? '${searchController.baseUrl}/storage/${property['images'][0]['url']}'
+
+                    // ✅ الإصلاح الأساسي: نتعامل مع رابط كامل أو مسار نسبي مع بعض
+                    final rawImage = (property['images'] != null &&
+                            property['images'].isNotEmpty)
+                        ? (property['images'][0]['url'] ?? '') as String
                         : '';
+                    final imageUrl =
+                        _resolveImageUrl(rawImage, searchController.baseUrl);
+
                     final isFav =
                         favoritesController.isFavorite(property['id']);
 
@@ -309,7 +314,7 @@ class CustomerPropertiesScreen extends StatelessWidget {
   }
 
   // ============================================================
-  // ✅ شيت فلاتر إضافية - بسيط، خيار واحد لكل سطر
+  // ✅ شيت فلاتر إضافية - مع تحسين السعر
   // ============================================================
   void _openFiltersSheet(
       BuildContext context, CustomerSearchController searchController) {
@@ -331,9 +336,9 @@ class CustomerPropertiesScreen extends StatelessWidget {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: DraggableScrollableSheet(
             expand: false,
-            initialChildSize: 0.7,
+            initialChildSize: 0.75,
             minChildSize: 0.4,
-            maxChildSize: 0.9,
+            maxChildSize: 0.95,
             builder: (context, scrollController) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
@@ -368,6 +373,9 @@ class CustomerPropertiesScreen extends StatelessWidget {
                       child: ListView(
                         controller: scrollController,
                         children: [
+                          // ============================================
+                          // ✅ نوع العقار
+                          // ============================================
                           Text('نوع العقار',
                               style: GoogleFonts.cairo(
                                   color: text,
@@ -407,6 +415,10 @@ class CustomerPropertiesScreen extends StatelessWidget {
                                 }).toList(),
                               )),
                           const SizedBox(height: 22),
+
+                          // ============================================
+                          // ✅ المنطقة
+                          // ============================================
                           Text('المنطقة',
                               style: GoogleFonts.cairo(
                                   color: text,
@@ -445,43 +457,104 @@ class CustomerPropertiesScreen extends StatelessWidget {
                                 style: GoogleFonts.cairo(color: text),
                               )),
                           const SizedBox(height: 22),
-                          Text('السعر (ل.س)',
-                              style: GoogleFonts.cairo(
-                                  color: text,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700)),
+
+                          // ============================================
+                          // ✅ السعر بالليرة السورية (مع clamp + رقم كامل بفواصل)
+                          // ============================================
+                          Row(
+                            children: [
+                              Text('السعر (ل.س)',
+                                  style: GoogleFonts.cairo(
+                                      color: text,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700)),
+                              const Spacer(),
+                              Obx(() => Text(
+                                    '${_formatFullNumber(searchController.minPrice.value)} - ${_formatFullNumber(searchController.maxPrice.value)}',
+                                    style: GoogleFonts.cairo(
+                                        color: primary,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  )),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
                           Obx(() => RangeSlider(
                                 min: 0,
-                                max: 1000000000,
+                                max: 100000000,
+                                divisions: 100,
                                 values: RangeValues(
-                                  searchController.minPrice.value.toDouble(),
-                                  searchController.maxPrice.value.toDouble(),
+                                  searchController.minPrice.value
+                                      .toDouble()
+                                      .clamp(0, 100000000),
+                                  searchController.maxPrice.value
+                                      .toDouble()
+                                      .clamp(0, 100000000),
                                 ),
-                                onChanged: (values) =>
-                                    searchController.setPriceRange(
-                                        values.start.toInt(),
-                                        values.end.toInt()),
+                                onChanged: (values) {
+                                  searchController.setPriceRange(
+                                    values.start.toInt(),
+                                    values.end.toInt(),
+                                  );
+                                },
                                 activeColor: primary,
+                                inactiveColor: isDark
+                                    ? Colors.white24
+                                    : Colors.grey.shade300,
                               )),
-                          Obx(() => Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                      _formatPrice(
-                                          searchController.minPrice.value),
-                                      style: GoogleFonts.cairo(
-                                          color: subText, fontSize: 12)),
-                                  Text(
-                                      _formatPrice(
-                                          searchController.maxPrice.value),
-                                      style: GoogleFonts.cairo(
-                                          color: subText, fontSize: 12)),
-                                ],
+                          const SizedBox(height: 22),
+
+                          // ============================================
+                          // ✅ السعر بالدولار (مع clamp + رقم كامل بفواصل)
+                          // ============================================
+                          Row(
+                            children: [
+                              Text('السعر (\$)',
+                                  style: GoogleFonts.cairo(
+                                      color: text,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700)),
+                              const Spacer(),
+                              Obx(() => Text(
+                                    '\$${_formatFullNumber(searchController.minPriceUsd.value)} - \$${_formatFullNumber(searchController.maxPriceUsd.value)}',
+                                    style: GoogleFonts.cairo(
+                                        color: primary,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  )),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Obx(() => RangeSlider(
+                                min: 0,
+                                max: 100000,
+                                divisions: 100,
+                                values: RangeValues(
+                                  searchController.minPriceUsd.value
+                                      .toDouble()
+                                      .clamp(0, 100000),
+                                  searchController.maxPriceUsd.value
+                                      .toDouble()
+                                      .clamp(0, 100000),
+                                ),
+                                onChanged: (values) {
+                                  searchController.setPriceRangeUsd(
+                                    values.start.toInt(),
+                                    values.end.toInt(),
+                                  );
+                                },
+                                activeColor: primary,
+                                inactiveColor: isDark
+                                    ? Colors.white24
+                                    : Colors.grey.shade300,
                               )),
+                          const SizedBox(height: 12),
                         ],
                       ),
                     ),
+                    // ============================================
+                    // ✅ زر عرض النتائج
+                    // ============================================
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -533,14 +606,65 @@ class CustomerPropertiesScreen extends StatelessWidget {
     return map[type] ?? type;
   }
 
+  // ✅ تنسيق مختصر (م/أ) - مستخدم بكرت العقار بالقائمة الرئيسية فقط
   String _formatPrice(int price) {
-    if (price >= 1000000000) {
-      return '${(price / 1000000000).toStringAsFixed(1)}م';
-    } else if (price >= 1000000) {
+    if (price >= 100000000) {
       return '${(price / 1000000).toStringAsFixed(0)}م';
+    } else if (price >= 1000000) {
+      return '${(price / 1000000).toStringAsFixed(1)}م';
     } else if (price >= 1000) {
       return '${(price / 1000).toStringAsFixed(0)}أ';
     }
     return price.toString();
+  }
+
+  // ✅ تنسيق رقم كامل بفواصل (بدون اختصار) - مستخدم بعرض الفلاتر
+  String _formatFullNumber(num value) {
+    final str = value.toInt().toString();
+    final buffer = StringBuffer();
+    for (int i = 0; i < str.length; i++) {
+      final remaining = str.length - i;
+      if (i != 0 && remaining % 3 == 0) {
+        buffer.write(',');
+      }
+      buffer.write(str[i]);
+    }
+    return buffer.toString();
+  }
+
+  // ============================================================
+  // ✅ جديد: يحل مشكلة تكرار الدومين بروابط الصور (404)
+  // بعض السجلات بالباك اند مخزّن فيها رابط كامل جاهز
+  // (https://...) وبعضها مخزّن فيها مسار نسبي فقط (properties/x.png)
+  // هالدالة بتتعرف على الحالة وبترجع رابط صحيح دايمًا بدون تكرار.
+  // ============================================================
+  String _resolveImageUrl(String rawUrl, String baseUrl) {
+    if (rawUrl.isEmpty) return '';
+
+    // ✅ الحالة 1: الرابط كامل، استخدمه مباشرة
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
+    }
+
+    // ✅ الحالة 2: مسار نسبي، أضف baseUrl مع التأكد من عدم التكرار
+    String cleanPath = rawUrl;
+
+    // تأكد من وجود / في البداية
+    if (!cleanPath.startsWith('/')) {
+      cleanPath = '/$cleanPath';
+    }
+
+    // تأكد من وجود /storage/ في المسار (مرة واحدة فقط)
+    if (!cleanPath.startsWith('/storage/')) {
+      cleanPath = '/storage$cleanPath';
+    }
+
+    // تأكد من أن baseUrl لا ينتهي بـ /
+    String cleanBaseUrl = baseUrl;
+    if (cleanBaseUrl.endsWith('/')) {
+      cleanBaseUrl = cleanBaseUrl.substring(0, cleanBaseUrl.length - 1);
+    }
+
+    return '$cleanBaseUrl$cleanPath';
   }
 }
