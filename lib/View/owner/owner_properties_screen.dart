@@ -178,13 +178,6 @@ class OwnerPropertiesScreen extends StatelessWidget {
           ),
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed('/add-property');
-        },
-        backgroundColor: primary,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
     );
   }
 }

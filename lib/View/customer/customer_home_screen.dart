@@ -89,15 +89,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.notifications_none_rounded,
-              color: text,
-            ),
-          ),
-        ],
       ),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),

@@ -74,16 +74,9 @@ class LoginController extends GetxController {
           Get.offAllNamed('/owner-home');
         } else if (role == 'customer') {
           Get.offAllNamed('/customer-home');
-        } else if (role == 'partner') {
-          Get.offAllNamed('/owner-home'); // أو صفحة الشريك
-        } else if (role == 'admin') {
-          Get.offAllNamed('/owner-home'); // أو صفحة الأدمن
         } else {
           Get.offAllNamed('/owner-home'); // القيمة الافتراضية
         }
-      } else {
-        _showMessage(response.data['message'] ?? 'فشل تسجيل الدخول',
-            isError: true);
       }
     } on DioException catch (e) {
       _showMessage(e.response?.data['message'] ?? 'خطأ في الاتصال',

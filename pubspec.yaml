@@ -32,6 +32,8 @@ dependencies:
   firebase_messaging: ^16.3.0
   smooth_page_indicator: ^1.0.1
   google_maps_flutter: ^2.14.2
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
 
 dev_dependencies:
   flutter_test:

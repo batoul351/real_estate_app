@@ -38,13 +38,6 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Icon(Icons.notifications_none_rounded),
-          ),
-        ],
       ),
 
       /// BODY (ONLY PAGES — no extra clutter)
@@ -57,20 +50,15 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-
         decoration: BoxDecoration(
           color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
-
           borderRadius: BorderRadius.circular(25),
-
           boxShadow: [
             BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20),
           ],
         ),
-
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-
           children: [
             _item(Icons.dashboard_rounded, 0),
             _item(Icons.home_work_rounded, 1),
@@ -87,17 +75,13 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
 
     return GestureDetector(
       onTap: () => setState(() => index = i),
-
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-
         padding: const EdgeInsets.all(10),
-
         decoration: BoxDecoration(
           color: active ? const Color(0xff1E3A8A) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
         ),
-
         child: Icon(
           icon,
           color: active ? Colors.white : Colors.grey,
@@ -107,4 +91,3 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
     );
   }
 }
-
