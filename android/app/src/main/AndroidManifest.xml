@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
-        android:label="real_estate"
+        android:label="Haven Syria"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

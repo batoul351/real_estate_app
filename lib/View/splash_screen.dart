@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get_storage/get_storage.dart';
 import 'welcome_screen.dart';
+import '../View/owner/owner_home_screen.dart';
+import '../View/customer/customer_home_screen.dart';
+// أضف import للـ ThemeService حسب مساره عندك:
+// import '../Services/theme_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,10 +41,27 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
 
     Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
+      if (mounted) _checkAuthAndNavigate();
+    });
+  }
+
+  void _checkAuthAndNavigate() {
+    final storage = GetStorage();
+    final token = storage.read('access_token');
+    final userData = storage.read('user_data');
+
+    if (token != null && token.toString().isNotEmpty && userData != null) {
+      final String role = userData['role'].toString();
+      if (role == 'owner') {
+        Get.off(() => const OwnerHomeScreen());
+      } else if (role == 'customer') {
+        Get.off(() => const CustomerHomeScreen());
+      } else {
         Get.off(() => const WelcomeScreen());
       }
-    });
+    } else {
+      Get.off(() => const WelcomeScreen());
+    }
   }
 
   @override
@@ -51,11 +73,16 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color bg = isDark ? const Color(0xff070B18) : const Color(0xffF6F7FB);
-    final Color text = isDark ? Colors.white : const Color(0xff0F172A);
-    final Color sub = isDark ? Colors.white70 : Colors.black54;
+
+    // 🎨 نفس ألوان ThemeService
     const Color primary = Color(0xff1E3A8A);
     const Color accent = Color(0xff0F766E);
+
+    final Color bg = isDark ? const Color(0xff101828) : const Color(0xffEEF2F7);
+    final Color text =
+        isDark ? const Color(0xffE6EAF2) : const Color(0xff0F172A);
+    final Color sub =
+        isDark ? const Color(0xff9AA4B8) : const Color(0xff64748B);
 
     return Scaffold(
       backgroundColor: bg,
@@ -66,14 +93,13 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /// Logo with Image (بدلاً من الأيقونة)
                 ScaleTransition(
                   scale: _scaleAnimation,
                   child: Container(
                     width: 130,
                     height: 130,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [primary, accent],
@@ -81,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withOpacity(isDark ? 0.45 : 0.15),
                           blurRadius: 30,
                           offset: const Offset(0, 15),
                         ),
@@ -94,7 +120,6 @@ class _SplashScreenState extends State<SplashScreen>
                         height: 130,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          // إذا فشل تحميل الصورة، تظهر أيقونة بديلة
                           return const Icon(
                             Icons.location_city_rounded,
                             color: Colors.white,
@@ -106,8 +131,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 40),
-
-                /// App Name
                 Text(
                   'Haven Syria',
                   style: GoogleFonts.cairo(
@@ -115,18 +138,9 @@ class _SplashScreenState extends State<SplashScreen>
                     fontSize: 38,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.5,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                /// Tagline
                 Text(
                   'بيع • شراء • إيجار',
                   style: GoogleFonts.cairo(
@@ -136,15 +150,13 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 60),
-
-                /// Loading Indicator
                 Container(
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
                     color: isDark
-                        ? Colors.white.withOpacity(0.1)
-                        : primary.withOpacity(0.1),
+                        ? Colors.white.withOpacity(0.08)
+                        : primary.withOpacity(0.08),
                     shape: BoxShape.circle,
                   ),
                   child: Padding(
@@ -156,14 +168,9 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                /// Loading Text
                 Text(
                   'جاري التحميل...',
-                  style: GoogleFonts.cairo(
-                    color: sub,
-                    fontSize: 13,
-                  ),
+                  style: GoogleFonts.cairo(color: sub, fontSize: 13),
                 ),
               ],
             ),

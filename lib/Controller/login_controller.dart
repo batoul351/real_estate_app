@@ -59,28 +59,53 @@ class LoginController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = response.data;
+        final String role = (data['user']?['role'] ?? '').toString();
 
-        await storage.write('access_token', data['access_token']);
-        await storage.write('user_data', data['user']);
-
-        dio.options.headers['Authorization'] = 'Bearer ${data['access_token']}';
-
-        _showMessage('تم تسجيل الدخول بنجاح');
-
-        // ✅ التوجيه حسب الدور
-        final String role = data['user']['role'].toString();
-
+        // ✅ نتحقق من الدور أولاً قبل ما نقرر شو الرسالة ووين نوجه
         if (role == 'owner') {
+          await storage.write('access_token', data['access_token']);
+          await storage.write('user_data', data['user']);
+          dio.options.headers['Authorization'] =
+              'Bearer ${data['access_token']}';
+
+          _showMessage('تم تسجيل الدخول بنجاح');
           Get.offAllNamed('/owner-home');
         } else if (role == 'customer') {
+          await storage.write('access_token', data['access_token']);
+          await storage.write('user_data', data['user']);
+          dio.options.headers['Authorization'] =
+              'Bearer ${data['access_token']}';
+
+          _showMessage('تم تسجيل الدخول بنجاح');
           Get.offAllNamed('/customer-home');
+        } else if (role == 'admin' || role == 'partner') {
+          // ❌ هذا الحساب ليس له واجهة داخل التطبيق، لا نخزّن التوكن ولا نعرض نجاح
+          await storage.remove('access_token');
+          await storage.remove('user_data');
+          dio.options.headers.remove('Authorization');
+
+          _showMessage(
+            'هذا الحساب مخصص للوحة التحكم على الموقع، يرجى تسجيل الدخول من هناك',
+            isError: true,
+          );
         } else {
-          Get.offAllNamed('/owner-home'); // القيمة الافتراضية
+          // ❌ دور غير معروف بالكامل
+          await storage.remove('access_token');
+          await storage.remove('user_data');
+          dio.options.headers.remove('Authorization');
+
+          _showMessage('نوع الحساب غير مدعوم، تواصل مع الدعم', isError: true);
         }
+      } else {
+        _showMessage('فشل تسجيل الدخول، حاول مرة أخرى', isError: true);
       }
     } on DioException catch (e) {
-      _showMessage(e.response?.data['message'] ?? 'خطأ في الاتصال',
-          isError: true);
+      final message = e.response?.data is Map
+          ? (e.response?.data['message'] ?? 'خطأ في الاتصال، تحقق من الإنترنت')
+          : 'خطأ في الاتصال، تحقق من الإنترنت';
+      _showMessage(message, isError: true);
+    } catch (e) {
+      _showMessage('حدث خطأ غير متوقع، حاول مرة أخرى', isError: true);
     } finally {
       loading.value = false;
     }
