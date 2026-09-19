@@ -1,17 +1,61 @@
-# real_estate
+📱 Haven Syria — تطبيق عقاري عربي كامل
+Flutter + Laravel
 
-A new Flutter project.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Getting Started
+✨ المميزات الرئيسية
 
-This project is a starting point for a Flutter application.
+🔐 نظام تسجيل آمن
+تسجيل حساب جديد، تسجيل دخول محمي، تحقق عبر OTP، وإعادة تعيين كلمة المرور.
 
-A few resources to get you started if this is your first Flutter project:
+🔍 بحث وفلترة متقدمة
+بحث بكلمات حرة، وفلترة حسب السعر والمنطقة ونوع العقار ونوع العرض، مع ترتيب النتائج حسب الأحدث أو السعر.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+🏠 عرض تفاصيل العقار
+صور متعددة، الموقع على الخريطة، السعر، المساحة، الوصف، وبيانات التواصل.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+📋 دورة حياة العقار
+طلب جديد ← قيد المراجعة ← مقبول/مرفوض ← نشر العقار
+مع إمكانية تسجيل سبب الرفض وإشعار صاحب العقار.
+
+❤️ حفظ العقارات
+إضافة العقارات المفضلة والعودة إليها لاحقاً.
+
+📞 تواصل مباشر
+اتصال هاتفي فوري.
+
+🔔 إشعارات فورية
+إعلام المستخدم بتغيرات حالة الطلبات والقرارات.
+
+━━━━━━━━━━━━━━━━━━━━
+
+🎯 فوائد التطبيق
+
+👤 للزبون:
+• توفير الوقت في البحث عن العقار المناسب
+• مقارنة الخيارات بسهولة
+• تواصل مباشر مع الجهة المسؤولة
+
+🏠 لصاحب العقار:
+• إضافة العقار إلكترونياً دون عناء
+• متابعة حالة الطلب لحظياً
+• معرفة سبب الرفض عند وجوده
+
+━━━━━━━━━━━━━━━━━━━━
+
+🛠️ التقنيات المستخدمة
+
+• Flutter — لواجهة المستخدم (أندرويد + ويب)
+• Dart — لغة برمجة الواجهة
+• Laravel — لإدارة الخادم ومنطق الأعمال
+• PHP — لغة برمجة الخادم
+• REST API — للاتصال بين التطبيق والخادم
+• JSON — لتنسيق تبادل البيانات
+• Google Maps — لعرض مواقع العقارات
+• MySQL — قاعدة البيانات
+
+
+━━━━━━━━━━━━━━━━━━━━
+
+
+🎯
